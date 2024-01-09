@@ -182,7 +182,7 @@ function isValueEqualsIndex(arr) {
  *    insertItem([ 1, 'b', 'c'], 'x', 0) => [ 'x', 1, 'b', 'c' ]
  */
 function insertItem(arr, item, index) {
-  arr.splice(index, 0, item);
+  return arr.splice(index, 0, item);
 }
 
 /**
@@ -574,10 +574,21 @@ function findLongestIncreasingSubsequence(nums) {
  *  propagateItemsByPositionIndex([ 'a', 'b', 'c', null ]) => [ 'a', 'b', 'b', 'c', 'c', 'c',  null, null, null, null ]
  *  propagateItemsByPositionIndex([ 1,2,3,4,5 ]) => [ 1, 2, 2, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5, 5 ]
  */
-function propagateItemsByPositionIndex(/* arr */) {
-  throw new Error('Not implemented');
-}
+function propagateItemsByPositionIndex(arr) {
+  const repeat = (n, el, res = [el]) => {
+    if (n <= 0) {
+      return res;
+    }
 
+    res.push(el);
+    return repeat(n - 1, el, res);
+  };
+
+  return arr.reduce((acc, cur, i) => {
+    acc.push(...repeat(i, cur));
+    return acc;
+  }, []);
+}
 /**
  * Shifts an array by n positions. If n is negative, the array is shifted to the left;
  * if positive, it is shifted to the right.
@@ -591,8 +602,15 @@ function propagateItemsByPositionIndex(/* arr */) {
  *    shiftArray(['a', 'b', 'c', 'd'], -1) => ['b', 'c', 'd', 'a']
  *    shiftArray([10, 20, 30, 40, 50], -3) => [40, 50, 10, 20, 30]
  */
-function shiftArray(/* arr, n */) {
-  throw new Error('Not implemented');
+function shiftArray(arr, n) {
+  const arr1 = arr.slice(0, 0 - n);
+  if (n > 0) {
+    arr.splice(0, arr.length - n);
+  }
+  if (n < 0) {
+    arr.splice(0, 0 - n);
+  }
+  return arr.concat(arr1);
 }
 
 /**
@@ -608,8 +626,21 @@ function shiftArray(/* arr, n */) {
  *   sortDigitNamesByNumericOrder([ 'nine','eight','nine','eight' ]) => [ 'eight','eight','nine','nine']
  *   sortDigitNamesByNumericOrder([ 'one','one','one','zero' ]) => [ 'zero','one','one','one' ]
  */
-function sortDigitNamesByNumericOrder(/* arr */) {
-  throw new Error('Not implemented');
+function sortDigitNamesByNumericOrder(arr) {
+  const arr1 = [
+    'zero',
+    'one',
+    'two',
+    'three',
+    'four',
+    'five',
+    'six',
+    'seven',
+    'eight',
+    'nine',
+  ];
+
+  return arr.sort((a, b) => arr1.indexOf(a) - arr1.indexOf(b));
 }
 
 /**
@@ -631,8 +662,26 @@ function sortDigitNamesByNumericOrder(/* arr */) {
  *   swapHeadAndTail([]) => []
  *
  */
-function swapHeadAndTail(/* arr */) {
-  throw new Error('Not implemented');
+function swapHeadAndTail(arr) {
+  const l = arr.length;
+  let arr2 = [];
+  if (l === 1) {
+    arr2 = arr;
+  } else if (l % 2 === 0) {
+    const l1 = l / 2;
+    const head = arr.slice(0, l1);
+    const tail = arr.slice(l1);
+    arr2.push(tail);
+    arr2.push(head);
+  } else if (l % 2 !== 0) {
+    const l1 = Math.floor(l / 2);
+    const head = arr.slice(0, l1);
+    const tail = arr.slice(l1 + 1);
+    arr2.push(tail);
+    arr2.push(arr[l1]);
+    arr2.push(head);
+  }
+  return arr2.flat(Infinity);
 }
 
 module.exports = {
